@@ -4,6 +4,7 @@ import zmq
 import sys
 import numpy as np
 from collections import deque
+import time
 from struct import *
 
 class Backend(threading.Thread):
@@ -96,4 +97,5 @@ class Backend(threading.Thread):
     def run(self):
         while True:
             self.receiveVal()
+            time.sleep(.1)
 

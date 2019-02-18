@@ -18,8 +18,8 @@ def timelines(y, xstart, xstop, sp, color='b'):
     """Plot timelines at y from xstart to xstop with given color."""   
     sp.hlines(y, xstart, xstop, color, lw=2)
 
-    sp.vlines(xstart, -1, 2, color, "--", lw=.1)
-    sp.vlines(xstop, -1, 2, color, "--", lw=.1)
+    sp.vlines(xstart, -1, 2, color, "--", lw=.08)
+    sp.vlines(xstop, -1, 2, color, "--", lw=.08)
 
 
     sp.vlines(xstart, y+.1, y-0.1, color, lw=1)
@@ -122,7 +122,7 @@ class VisConfIntervals(VisConf):
                 name = j if j else plotTitle
                 
                 #xfmt = matplotlib.dates.DateFormatter('%M:%S')
-                #sp.xaxis.set_major_formatter(xfmt)
+                #sp.xaxis.set_major_formatter(xfmtcolor)
                 if not name in self.namedict:
                     #label, insert and generate color
                     color = np.array([random.random() * 1, random.random() * 1, random.random()])
@@ -133,8 +133,11 @@ class VisConfIntervals(VisConf):
 
                     sp.scatter(lkz[:,1]/divisor, lkz[:,3], c=color)
 
+                if lkz[:,3][0] == -1:
+                    sp.vlines(lkz[:,1]/divisor, -1, 2, color, linestyles='dotted', lw=.2)
+                    #sp.vlines(xstop, y+.1, y-0.1, color, lw=1)
 
-                timelines(lkz[:,3], lkz[:,0]/divisor, lkz[:,2]/divisor, sp, "black" if lkz[:,3][0] != 0 else "red") 
+                timelines(lkz[:,3], lkz[:,0]/divisor, lkz[:,2]/divisor, sp, "black" if lkz[:,3][0] != -1 else color) 
                 sp.tick_params(top=False, bottom=True, left=False, right=False, labelleft=False, labelbottom=True)
                 sp.grid()
                 #for spine in sp.spines.values():
@@ -158,21 +161,21 @@ class VisConfIntervals(VisConf):
 
                 #sp.plot(x, y, label= name)
       
-        print(now)
-        if self.last:
+        if self.last and True:
             #for nn in np.arange(self.last, now, .1):
-            val = 20
-            vls = (now - self.last) /(1.+np.exp(-np.arange(val)+val/2))
+            val = 25
+            #vls = (now - self.last) /(1.+np.exp(-np.arange(val)+val/2))
+            vls = (now - self.last) *np.linspace(0, 1, val)
             #vls = (now - self.last)/2. /(1.+np.exp(-np.arange(val)+val/2)) + (now - self.last) / 2. * np.arange(val)/val
             for n in vls:
                 #(nn - 25)**3 / 
                 nn = self.last + n
                 begin = nn - 6
                 sp.set_xlim([begin, nn])
-                plt.pause(.001)
+                plt.pause(.0001)
         self.last = now
 
-        sp.legend()
+        sp.legend(loc="upper left")
         sp.set_title(name)
 
         pass

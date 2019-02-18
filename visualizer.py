@@ -10,12 +10,11 @@ from scipy import interpolate
 from backend import *
 from visualizationConfiguration import * 
 from visConfIntervals import * 
-
+import time
 
 
 
 backend = Backend(*sys.argv[1:])
-
 
 
 
@@ -57,11 +56,21 @@ def visualize():
 
 
 def walk(multithreaded=True):
-    if multithreaded: backend.start()
+    if multithreaded: 
+        backend.start()
     while True:
-        if not multithreaded: backend.receiveVal()
+
         visualize()
-        plt.pause(1)
+        nn = time.time()
+        nnn = nn
+        while nnn - nn < 1 and False:
+            nnn = time.time()
+            begin = nnn - 6
+            if len(visualizer.subplots) >= 2 and len(visualizer.subplots[1]) >= 1:
+                visualizer.subplots[1][0].set_xlim([begin, nnn])
+            #plt.xlim([begin, nnn])
+            plt.pause(.01)
+
 
 
 #visualizer = VisConf()
